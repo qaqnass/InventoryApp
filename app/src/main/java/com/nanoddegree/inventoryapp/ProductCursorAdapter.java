@@ -38,13 +38,14 @@ public class ProductCursorAdapter extends CursorAdapter {
     final TextView nameTextView = (TextView) view.findViewById(R.id.product_name);
     final TextView quantityTextView = (TextView) view.findViewById(R.id.product_quantity);
     final TextView priceTextView = (TextView) view.findViewById(R.id.product_price);
-//    Button salebtn = (Button) view.findViewById(R.id.product_sale);
+    Button salebtn = (Button) view.findViewById(R.id.product_sale_btn);
 
-    final int id = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
+    int idIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
     int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
     int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
     int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
 
+    final int productId = cursor.getInt(idIndex);
     String productName = cursor.getString(nameColumnIndex);
     final String productQuantity = cursor.getString(quantityColumnIndex);
     String productPrice = cursor.getString(priceColumnIndex);
@@ -53,24 +54,23 @@ public class ProductCursorAdapter extends CursorAdapter {
     quantityTextView.setText(productQuantity);
     priceTextView.setText(productPrice);
 
-//    salebtn.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View view) {
-//        System.out.println("ddddddddddddddddddddddddddddd"+id);
-//        String nameString = nameTextView.getText().toString().trim();
-//        String quantityString = quantityTextView.getText().toString().trim();
-//        String priceString = priceTextView.getText().toString().trim();
-//
-//        int quantity = Integer.parseInt(quantityString);
-//        int increaseByOne = quantity - 1;
-//        ContentValues values = new ContentValues();
-//        values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-//        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, increaseByOne);
-//        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-//
-//        Uri currentUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
-//        int rowsAffected = context.getContentResolver().update(currentUri, values, null, null);
-//      }
-//    });
+    salebtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        String nameString = nameTextView.getText().toString().trim();
+        String quantityString = quantityTextView.getText().toString().trim();
+        String priceString = priceTextView.getText().toString().trim();
+
+        int quantity = Integer.parseInt(quantityString);
+        int increaseByOne = quantity - 1;
+        ContentValues values = new ContentValues();
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, increaseByOne);
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
+
+        Uri currentUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
+        int rowsAffected = context.getContentResolver().update(currentUri, values, null, null);
+      }
+    });
   }
 }
